@@ -1,2 +1,3 @@
-# loggly_api
-Simple Python API client for Loggly
+# [Loggly API](http://loggly-api.hive.pt)
+
+Simple Python API client for Loggly.
