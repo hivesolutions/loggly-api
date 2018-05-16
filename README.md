@@ -5,6 +5,8 @@ Simple Python API client for Loggly.
 ## Configuration
 
 * `LOGGLY_TOKEN` (`str`) - The secret token to be for authentication on the Loggly API (defaults to `None`)
+* `LOGGLY_BUFFER_SIZE` (`int`) - The size of the buffer (in number of entries) until the buffer is flushed (defaults to `128`)
+* `LOGGLY_TIMEOUT` (`int`) - The timeout in seconds in seconds until the buffer is flushed (defaults to `30`)
 
 ## License
 

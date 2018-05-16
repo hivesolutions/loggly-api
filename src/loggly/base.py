@@ -56,10 +56,16 @@ class API(
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
         self.token = appier.conf("LOGGLY_TOKEN", None)
+        self.buffer_size = appier.conf("LOGGLY_BUFFER_SIZE", 16)
+        self.timeout = appier.conf("LOGGLY_TIMEOUT", 30)
         self.base_url = kwargs.get("base_url", BASE_URL)
         self.base_bulk_url = kwargs.get("base_bulk_url", BASE_BULK_URL)
         self.token = kwargs.get("token", self.token)
+        self.buffer_size = kwargs.get("buffer_size", self.buffer_size)
+        self.timeout = kwargs.get("timeout", self.timeout)
+        self.delayer = kwargs.get("delayer", None)
         self._build_url()
+        self._buffer = []
 
     def log(self, payload, tag = "default", silent = True):
         url = self.token_url + "tags/%s" % tag
@@ -76,6 +82,33 @@ class API(
         data = b"\n".join(buffer)
         contents = self.post(url, data = data, silent = silent)
         return contents
+
+    def log_buffer(self, payload):
+        self._buffer.append(payload)
+        should_flush = len(self._buffer) >= self.buffer_size
+        if should_flush: self._flush_buffer()
+
+    def _flush_buffer(self, force = False):
+        # retrieves some references from the current instance that
+        # are going to be used in the flush operation
+        buffer = self._buffer
+
+        # verifies if the buffer is empty and if that's the case and
+        # the force flag is not set, returns immediately
+        if not buffer and not force: return
+
+        # creates the lambda function that is going to be used for the
+        # bulk flushing operation of the buffer, this is going to be
+        # called on a delayed (async fashion) so that no blocking occurs
+        # in the current logical flow
+        call_log = lambda: self.log_bulk(buffer, tag = "default")
+
+        # schedules the call log operation and then empties the buffer
+        # so that it's no longer going to be used (flushed), notice that
+        # in case there's no delayer available calls the method immediately
+        if self.delayer: self.delayer(call_log)
+        else: call_log()
+        self.buffer = []
 
     def _build_url(self):
         self.token_url = "%s%s/" % (self.base_url, self.token)
