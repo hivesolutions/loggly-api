@@ -67,7 +67,7 @@ class API(
         return contents
 
     def log_bulk(self, logs, tag = "http", silent = True):
-        url = self.base_bulk_url + "tags/%s" % tag
+        url = self.token_bulk_url + "tags/%s" % tag
         buffer = []
         for log in logs:
             log_s = json.dumps(log)
