@@ -41,7 +41,7 @@ import os
 import setuptools
 
 setuptools.setup(
-    name = "loggly_api",
+    name = "loggly_api_python",
     version = "0.1.1",
     author = "Hive Solutions Lda.",
     author_email = "development@hive.pt",
