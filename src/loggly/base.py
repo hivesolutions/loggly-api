@@ -61,12 +61,12 @@ class API(
         self.token = kwargs.get("token", self.token)
         self._build_url()
 
-    def log(self, payload, tag = "http", silent = True):
+    def log(self, payload, tag = "default", silent = True):
         url = self.token_url + "tags/%s" % tag
         contents = self.post(url, data_j = payload, silent = silent)
         return contents
 
-    def log_bulk(self, logs, tag = "http", silent = True):
+    def log_bulk(self, logs, tag = "default", silent = True):
         url = self.token_bulk_url + "tags/%s" % tag
         buffer = []
         for log in logs:

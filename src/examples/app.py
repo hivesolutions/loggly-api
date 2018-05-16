@@ -64,7 +64,7 @@ class LogglyApp(appier.WebApp):
     @appier.route("/log_bulk", "GET")
     def log_bulk(self):
         messages = self.field("messages", ["hello", "world"], cast = list)
-        tag = self.field("tag", "http")
+        tag = self.field("tag", "default")
         api = self.get_api()
         messages_l = [dict(message = message) for message in messages]
         result = api.log_bulk(messages_l, tag = tag)
