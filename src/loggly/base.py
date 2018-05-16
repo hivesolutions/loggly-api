@@ -38,6 +38,7 @@ __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
 import json
+import time
 
 import appier
 
@@ -56,7 +57,7 @@ class API(
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
         self.token = appier.conf("LOGGLY_TOKEN", None)
-        self.buffer_size = appier.conf("LOGGLY_BUFFER_SIZE", 16)
+        self.buffer_size = appier.conf("LOGGLY_BUFFER_SIZE", 128)
         self.timeout = appier.conf("LOGGLY_TIMEOUT", 30)
         self.base_url = kwargs.get("base_url", BASE_URL)
         self.base_bulk_url = kwargs.get("base_bulk_url", BASE_BULK_URL)
@@ -65,6 +66,7 @@ class API(
         self.timeout = kwargs.get("timeout", self.timeout)
         self.delayer = kwargs.get("delayer", None)
         self._build_url()
+        self._last_flush = time.time()
         self._buffer = []
 
     def log(self, payload, tag = "default", silent = True):
@@ -85,7 +87,8 @@ class API(
 
     def log_buffer(self, payload):
         self._buffer.append(payload)
-        should_flush = len(self._buffer) >= self.buffer_size
+        should_flush = len(self._buffer) >= self.buffer_size or\
+            time.time() > self._last_flush + self.timeout
         if should_flush: self._flush_buffer()
 
     def _flush_buffer(self, force = False):
@@ -108,7 +111,8 @@ class API(
         # in case there's no delayer available calls the method immediately
         if self.delayer: self.delayer(call_log)
         else: call_log()
-        self.buffer = []
+        self._buffer = []
+        self._last_flush = time.time()
 
     def _build_url(self):
         self.token_url = "%s%s/" % (self.base_url, self.token)
