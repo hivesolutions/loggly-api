@@ -56,7 +56,7 @@ class LogglyApp(appier.WebApp):
 
     @appier.route("/log/<str:message>", "GET")
     def log(self, message):
-        tag = self.field("tag", "http")
+        tag = self.field("tag", "default")
         api = self.get_api()
         result = api.log(dict(message = message), tag = tag)
         return result
