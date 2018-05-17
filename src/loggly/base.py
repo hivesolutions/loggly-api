@@ -91,6 +91,9 @@ class API(
             time.time() > self._last_flush + self.timeout
         if should_flush: self._flush_buffer()
 
+    def log_flush(self):
+        self._flush_buffer()
+
     def _flush_buffer(self, force = False):
         # retrieves some references from the current instance that
         # are going to be used in the flush operation
