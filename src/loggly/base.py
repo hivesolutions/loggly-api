@@ -43,7 +43,7 @@ import time
 import appier
 
 BASE_URL = "https://logs-01.loggly.com/inputs/"
-""" The default base URL for bulk operations to be used
+""" The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
 BASE_BULK_URL = "https://logs-01.loggly.com/bulk/"
