@@ -28,42 +28,10 @@ __copyright__ = "Copyright (c) 2008-2025 Hive Solutions Lda."
 __license__ = "Apache License, Version 2.0"
 """ The license for the module """
 
-import appier
-
-from . import base
+import unittest
 
 
-class LogglyApp(appier.WebApp):
+class BaseTest(unittest.TestCase):
 
-    def __init__(self, *args, **kwargs):
-        appier.WebApp.__init__(self, name="loggly", *args, **kwargs)
-
-    @appier.route("/", "GET")
-    def index(self):
-        return self.log("hello")
-
-    @appier.route("/log/<str:message>", "GET")
-    def log(self, message):
-        tag = self.field("tag", "default")
-        api = self.get_api()
-        result = api.log(dict(message=message), tag=tag)
-        return result
-
-    @appier.route("/log_bulk", "GET")
-    def log_bulk(self):
-        messages = self.field("messages", ["hello", "world"], cast=list)
-        tag = self.field("tag", "default")
-        api = self.get_api()
-        messages_l = [dict(message=message) for message in messages]
-        result = api.log_bulk(messages_l, tag=tag)
-        return result
-
-    def get_api(self):
-        return base.get_api()
-
-
-if __name__ == "__main__":
-    app = LogglyApp()
-    app.serve()
-else:
-    __path__ = []
+    def test_basic(self):
+        self.assertEqual(1 + 1, 2)

@@ -16,7 +16,7 @@ Loggly API is currently licensed under the [Apache License, Version 2.0](http://
 
 ## Build Automation
 
-[![Build Status](https://app.travis-ci.com/hivesolutions/loggly-api.svg?branch=master)](https://travis-ci.com/github/hivesolutions/loggly-api)
+[![Build Status](https://github.com/hivesolutions/loggly-api/workflows/Main%20Workflow/badge.svg)](https://github.com/hivesolutions/loggly-api/actions)
 [![Coverage Status](https://coveralls.io/repos/hivesolutions/loggly-api/badge.svg?branch=master)](https://coveralls.io/r/hivesolutions/loggly-api?branch=master)
 [![PyPi Status](https://img.shields.io/pypi/v/loggly-api.svg)](https://pypi.python.org/pypi/loggly-api)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://www.apache.org/licenses/)
