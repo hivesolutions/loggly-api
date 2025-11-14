@@ -42,6 +42,7 @@ setuptools.setup(
     url="http://loggly-api.hive.pt",
     zip_safe=False,
     packages=["loggly"],
+    test_suite="loggly.test",
     package_dir={"": os.path.normpath("src")},
     install_requires=["appier"],
     classifiers=[
